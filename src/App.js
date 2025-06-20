@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from './components/Header/Header';
 import MovieGrid from './components/MovieGrid';
+import CategoryFilter from './components/CategoryFilter';
 import moviesData from './data/moviesData';
 import { FaGithub, FaDribbble, FaTwitter, FaInstagram } from 'react-icons/fa';
 import './App.css';
@@ -8,6 +9,7 @@ import './App.css';
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [movies, setMovies] = useState(moviesData);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   
   // Function to handle navigation clicks
   const handleNavigation = (tab) => {
@@ -16,19 +18,64 @@ function App() {
     if (tab === 'trending') {
       // Filter to only show trending movies
       setMovies(moviesData.filter(movie => movie.trending));
+      setSelectedCategory('all');
+    } else if (tab === 'categories') {
+      // Show all movies when switching to categories tab
+      setMovies(moviesData);
+      setSelectedCategory('all');
     } else {
       // Show all movies
       setMovies(moviesData);
+      setSelectedCategory('all');
     }
+  };
+
+  // Function to handle category filtering
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    
+    if (category === 'all') {
+      setMovies(moviesData);
+    } else {
+      setMovies(moviesData.filter(movie => movie.category === category));
+    }
+  };
+
+  // Function to get title based on active tab and selected category
+  const getTitle = () => {
+    if (activeTab === 'trending') {
+      return 'Trending Movies';
+    } else if (activeTab === 'categories') {
+      if (selectedCategory === 'all') {
+        return 'All Categories';
+      } else {
+        const categoryNames = {
+          'action': 'Action Movies',
+          'drama': 'Drama Movies',
+          'sci-fi': 'Sci-Fi Movies',
+          'crime': 'Crime Movies'
+        };
+        return categoryNames[selectedCategory] || 'Movies';
+      }
+    }
+    return 'Popular Movies';
   };
 
   return (
     <div className="App min-h-screen bg-gray-100 flex flex-col">
       <Header activeTab={activeTab} onNavigate={handleNavigation} />
       <main className="py-4 flex-grow">
+        {activeTab === 'categories' && (
+          <div className="container mx-auto px-2 sm:px-4 py-4">
+            <CategoryFilter 
+              selectedCategory={selectedCategory}
+              onCategoryChange={handleCategoryChange}
+            />
+          </div>
+        )}
         <MovieGrid 
           movies={movies} 
-          title={activeTab === 'trending' ? 'Trending Movies' : 'Popular Movies'} 
+          title={getTitle()} 
         />
       </main>
       <footer className="bg-gray-800 text-white py-6 sm:py-8">

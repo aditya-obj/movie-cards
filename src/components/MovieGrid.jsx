@@ -21,10 +21,16 @@ const MovieGrid = ({ movies, title = "Popular Movies" }) => {
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">No movies found.</p>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-6 md:gap-8">
-          {movies.map((movie) => (
-            <div key={movie.id} className="flex w-full">
+      ) : (        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-6 md:gap-8">
+          {movies.map((movie, index) => (
+            <div 
+              key={movie.id} 
+              className="flex w-full animate-fadeInUp"
+              style={{
+                animationDelay: `${index * 0.1}s`,
+                animationFillMode: 'both'
+              }}
+            >
               <MovieCard movie={movie} />
             </div>
           ))}
