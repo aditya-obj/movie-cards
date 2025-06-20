@@ -20,10 +20,10 @@ const CategoryFilter = ({ selectedCategory, onCategoryChange }) => {
               key={category.id}
               onClick={() => onCategoryChange(category.id)}
               className={`
-                flex items-center space-x-1 md:space-x-2 px-3 py-2 md:px-6 md:py-3 
+                flex items-center space-x-1 md:space-x-2 px-2.5 py-1.5 md:px-6 md:py-3 
                 rounded-full font-medium transition-all duration-500 ease-out
-                transform hover:scale-105 hover:-translate-y-1
-                shadow-lg hover:shadow-xl active:scale-95
+                transform hover:scale-105 hover:-translate-y-0.5 active:scale-95
+                shadow-md hover:shadow-lg text-xs md:text-base
                 ${
                   selectedCategory === category.id
                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-indigo-200 scale-105'
@@ -36,7 +36,7 @@ const CategoryFilter = ({ selectedCategory, onCategoryChange }) => {
                   selectedCategory === category.id ? 'text-white' : 'text-indigo-600'
                 }`} 
               />
-              <span className="text-xs md:text-base whitespace-nowrap">{category.name}</span>
+              <span className="whitespace-nowrap">{category.name}</span>
             </button>
           );
         })}

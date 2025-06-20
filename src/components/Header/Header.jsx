@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaHome, FaFire, FaLayerGroup, FaFilm, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaFire, FaLayerGroup, FaFilm, FaBars } from 'react-icons/fa';
 import styles from './Header.module.css';
 
 const Header = ({ activeTab, onNavigate }) => {
@@ -13,6 +13,23 @@ const Header = ({ activeTab, onNavigate }) => {
     onNavigate(tab);
     setIsMobileMenuOpen(false); // Close mobile menu after navigation
   };
+
+  // Custom Cross SVG Component
+  const CrossIcon = () => (
+    <svg 
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  );
 
   return (
     <header className={styles.header}>
@@ -65,20 +82,32 @@ const Header = ({ activeTab, onNavigate }) => {
               </a>
             </li>
           </ul>
-        </nav>
-
-        {/* Mobile Hamburger Button */}
+        </nav>        {/* Mobile Hamburger Button */}
         <button 
           className={`${styles.hamburger} md:hidden`}
           onClick={toggleMobileMenu}
           aria-label="Toggle mobile menu"
         >
-          {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          {isMobileMenuOpen ? <CrossIcon /> : <FaBars size={24} />}
         </button>
 
         {/* Mobile Navigation Menu */}
         <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
-          <nav>
+          <div className={styles.mobileMenuHeader}>
+            <div className="flex items-center">
+              <FaFilm className={styles.mobileLogoIcon} />
+              <h2 className={styles.mobileTitle}>Movie Cards</h2>
+            </div>
+            <button 
+              className={styles.mobileCloseButton}
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close mobile menu"
+            >
+              <CrossIcon />
+            </button>
+          </div>
+          
+          <nav className={styles.mobileNav}>
             <ul className={styles.mobileNavList}>
               <li>
                 <a 
@@ -90,7 +119,7 @@ const Header = ({ activeTab, onNavigate }) => {
                   className={`${styles.mobileNavLink} ${activeTab === 'home' ? styles.mobileActiveLink : ''}`}
                 >
                   <FaHome className={styles.mobileNavIcon} />
-                  Home
+                  <span>Home</span>
                 </a>
               </li>
               <li>
@@ -103,7 +132,7 @@ const Header = ({ activeTab, onNavigate }) => {
                   className={`${styles.mobileNavLink} ${activeTab === 'trending' ? styles.mobileActiveLink : ''}`}
                 >
                   <FaFire className={styles.mobileNavIcon} />
-                  Trending
+                  <span>Trending</span>
                 </a>
               </li>
               <li>
@@ -116,7 +145,7 @@ const Header = ({ activeTab, onNavigate }) => {
                   className={`${styles.mobileNavLink} ${activeTab === 'categories' ? styles.mobileActiveLink : ''}`}
                 >
                   <FaLayerGroup className={styles.mobileNavIcon} />
-                  Categories
+                  <span>Categories</span>
                 </a>
               </li>
             </ul>
