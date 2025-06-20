@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaHome, FaFire, FaLayerGroup, FaFilm, FaBars } from 'react-icons/fa';
+import { FaFire, FaLayerGroup, FaFilm, FaBars } from 'react-icons/fa';
 import styles from './Header.module.css';
 
 const Header = ({ activeTab, onNavigate }) => {
@@ -13,6 +13,24 @@ const Header = ({ activeTab, onNavigate }) => {
     onNavigate(tab);
     setIsMobileMenuOpen(false); // Close mobile menu after navigation
   };
+
+  // Modern Home SVG Component
+  const HomeIcon = ({ className }) => (
+    <svg 
+      className={className}
+      width="16" 
+      height="16" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    >
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9,22 9,12 15,12 15,22"/>
+    </svg>
+  );
 
   // Custom Cross SVG Component
   const CrossIcon = () => (
@@ -30,19 +48,24 @@ const Header = ({ activeTab, onNavigate }) => {
       <line x1="6" y1="6" x2="18" y2="18"></line>
     </svg>
   );
-
   return (
-    <header className={styles.header}>
-      <div className="container mx-auto py-5 px-4 flex justify-between items-center">
+    <header className={styles.header}>      <div className="container mx-auto py-4 px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <FaFilm className={styles.logoIcon} />
-          <h1 className={styles.title}>React Movie Cards</h1>
+          <a 
+            href="/" 
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigation('home');
+            }}
+            className={styles.logoLink}
+          >
+            <FaFilm className={styles.logoIcon} />
+            <h1 className={styles.title}>React Movie Cards</h1>
+          </a>
         </div>
-        
-        {/* Desktop Navigation */}
+          {/* Desktop Navigation */}
         <nav className="hidden md:block">
-          <ul className="flex items-center space-x-6">
-            <li>
+          <ul className={`${styles.navList} flex items-center relative`}>            <li>
               <a 
                 href="#" 
                 onClick={(e) => {
@@ -50,22 +73,10 @@ const Header = ({ activeTab, onNavigate }) => {
                   handleNavigation('home');
                 }}
                 className={`${styles.navLink} ${activeTab === 'home' ? styles.activeLink : ''}`}
+                data-nav="home"
               >
-                <FaHome className={styles.navIcon} />
+                <HomeIcon className={styles.navIcon} />
                 Home
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavigation('trending');
-                }}
-                className={`${styles.navLink} ${activeTab === 'trending' ? styles.activeLink : ''}`}
-              >
-                <FaFire className={styles.navIcon} />
-                Trending
               </a>
             </li>
             <li>
@@ -76,13 +87,29 @@ const Header = ({ activeTab, onNavigate }) => {
                   handleNavigation('categories');
                 }}
                 className={`${styles.navLink} ${activeTab === 'categories' ? styles.activeLink : ''}`}
+                data-nav="categories"
               >
                 <FaLayerGroup className={styles.navIcon} />
                 Categories
               </a>
             </li>
+            <li>
+              <a 
+                href="#" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavigation('trending');
+                }}
+                className={`${styles.navLink} ${activeTab === 'trending' ? styles.activeLink : ''}`}
+                data-nav="trending"
+              >
+                <FaFire className={styles.navIcon} />
+                Trending
+              </a>
+            </li>
+            <div className={`${styles.underlineIndicator} ${styles[`underline-${activeTab}`]}`}></div>
           </ul>
-        </nav>        {/* Mobile Hamburger Button */}
+        </nav>{/* Mobile Hamburger Button */}
         <button 
           className={`${styles.hamburger} md:hidden`}
           onClick={toggleMobileMenu}
@@ -92,12 +119,17 @@ const Header = ({ activeTab, onNavigate }) => {
         </button>
 
         {/* Mobile Navigation Menu */}
-        <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
-          <div className={styles.mobileMenuHeader}>
-            <div className="flex items-center">
+        <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>          <div className={styles.mobileMenuHeader}>            <a 
+              href="/" 
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigation('home');
+              }}
+              className={`flex items-center ${styles.mobileLogoLink}`}
+            >
               <FaFilm className={styles.mobileLogoIcon} />
               <h2 className={styles.mobileTitle}>Movie Cards</h2>
-            </div>
+            </a>
             <button 
               className={styles.mobileCloseButton}
               onClick={() => setIsMobileMenuOpen(false)}
@@ -107,9 +139,7 @@ const Header = ({ activeTab, onNavigate }) => {
             </button>
           </div>
           
-          <nav className={styles.mobileNav}>
-            <ul className={styles.mobileNavList}>
-              <li>
+          <nav className={styles.mobileNav}>            <ul className={styles.mobileNavList}>              <li>
                 <a 
                   href="#" 
                   onClick={(e) => {
@@ -118,21 +148,8 @@ const Header = ({ activeTab, onNavigate }) => {
                   }}
                   className={`${styles.mobileNavLink} ${activeTab === 'home' ? styles.mobileActiveLink : ''}`}
                 >
-                  <FaHome className={styles.mobileNavIcon} />
+                  <HomeIcon className={styles.mobileNavIcon} />
                   <span>Home</span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavigation('trending');
-                  }}
-                  className={`${styles.mobileNavLink} ${activeTab === 'trending' ? styles.mobileActiveLink : ''}`}
-                >
-                  <FaFire className={styles.mobileNavIcon} />
-                  <span>Trending</span>
                 </a>
               </li>
               <li>
@@ -146,6 +163,19 @@ const Header = ({ activeTab, onNavigate }) => {
                 >
                   <FaLayerGroup className={styles.mobileNavIcon} />
                   <span>Categories</span>
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavigation('trending');
+                  }}
+                  className={`${styles.mobileNavLink} ${activeTab === 'trending' ? styles.mobileActiveLink : ''}`}
+                >
+                  <FaFire className={styles.mobileNavIcon} />
+                  <span>Trending</span>
                 </a>
               </li>
             </ul>
