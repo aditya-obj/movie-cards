@@ -21,7 +21,7 @@ const MovieGrid = ({ movies, title = "Popular Movies" }) => {
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">No movies found.</p>
         </div>
-      ) : (        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-6 md:gap-8">
+      ) : (        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
           {movies.map((movie, index) => (
             <div 
               key={movie.id} 
